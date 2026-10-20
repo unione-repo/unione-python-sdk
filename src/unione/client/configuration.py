@@ -31,7 +31,7 @@ class Configuration:
     timeout: float = 30.0
     """Request timeout in seconds."""
 
-    user_agent: str = "unione-python-sdk/1.1.2"
+    user_agent: str = "unione-python-sdk/1.1.3"
 
     platform: Optional[str] = None
     """Package that uses the SDK and its version, e.g. "django.1.0.0": goes to the "platform" query parameter before the SDK one

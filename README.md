@@ -1,4 +1,4 @@
-# UniOne Python SDK 1.1.2
+# UniOne Python SDK 1.1.3
 
 Web API 1.90
 
