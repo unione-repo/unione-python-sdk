@@ -91,6 +91,16 @@ class BodyObject:
         }
         return {k: v for k, v in result.items() if v is not None}
 
+    @classmethod
+    def from_html(cls, html: str, plaintext: Optional[str] = None) -> BodyObject:
+        """An HTML body, with an optional plain-text part."""
+        return cls(html=html, plaintext=plaintext)
+
+    @classmethod
+    def from_text(cls, plaintext: str) -> BodyObject:
+        """A plain-text body."""
+        return cls(plaintext=plaintext)
+
 
 @dataclass
 class HeadersObject:

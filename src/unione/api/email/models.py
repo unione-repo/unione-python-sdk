@@ -1,6 +1,7 @@
 """Models of the Email section."""
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
 from typing import Any, Dict, List, Optional
@@ -310,6 +311,23 @@ class MessageObjectRecipientsItem:
             "metadata": self.metadata,
         }
         return {k: v for k, v in result.items() if v is not None}
+
+    @classmethod
+    def from_address(cls, address: str, substitutions: Optional[Dict[str, str]] = None) -> MessageObjectRecipientsItem:
+        """A recipient from "email" or "Name <email>": the name goes to the to_name substitution (the name in the
+        "To" header); substitutions: more substitutions of the recipient."""
+        email, name = address.strip(), ""
+        match = re.match(r"^(.*)<([^>]+)>$", email, re.S)
+        if match:
+            email, name = match.group(2).strip(), match.group(1).strip().strip('"')
+        if name:
+            substitutions = {"to_name": name, **(substitutions or {})}
+        return cls(email=email, substitutions=substitutions)
+
+    def with_metadata(self, metadata: Dict[str, str]) -> MessageObjectRecipientsItem:
+        """Sets the metadata of the recipient (returned in its webhook events); returns the recipient."""
+        self.metadata = metadata
+        return self
 
 
 @dataclass
