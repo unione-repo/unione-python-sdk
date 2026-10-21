@@ -16,7 +16,7 @@ from .api.system import SystemApi
 from .api.obsolete import ObsoleteApi
 
 __all__ = ["client", "UniOneClient", "ApiClient", "ApiError", "Configuration", "Transport", "UrllibTransport"]
-__version__ = "1.2.3"
+__version__ = "1.2.4"
 
 
 class UniOneClient:

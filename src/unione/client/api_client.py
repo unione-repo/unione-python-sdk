@@ -14,7 +14,7 @@ from typing import Any, Callable, Dict, Mapping, Optional, Tuple, Union
 from .configuration import Configuration
 from .errors import ApiError
 
-PLATFORM = "python-sdk.1.2.3"
+PLATFORM = "python-sdk.1.2.4"
 """The SDK and its version in the "platform" query parameter of every request."""
 
 
