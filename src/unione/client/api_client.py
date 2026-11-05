@@ -16,7 +16,7 @@ from .configuration import Configuration
 from . import _errors
 from .errors import ApiError
 
-PLATFORM = "python-sdk.1.3.0"
+PLATFORM = "python-sdk.1.3.1"
 """The SDK and its version in the "platform" query parameter of every request."""
 
 
