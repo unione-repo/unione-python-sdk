@@ -141,7 +141,7 @@ client.email.send(EmailSendRequest(
 
 ### Retry safely
 
-A repeat with the same `idempotence_key` within a minute is not sent twice: retry network errors, timeouts, 429 and 5xx with it.
+A repeat with the same `idempotence_key` within a minute is not sent twice: retry the retryable errors (network errors, timeouts, 429 and 5xx) with it; after that minute check your own record of the sent email before repeating.
 
 ```python
 client.email.send(EmailSendRequest(
@@ -165,8 +165,9 @@ from unione import ApiError
 try:
     client.email.send(request)
 except ApiError as e:
-    # HTTP status (0: network error or timeout), API error code, message
-    print(e.http_status, e.error_code, e.message)
+    # the message: method, API error code, HTTP status and how to fix it; kind: what failed; retryable: a repeat may succeed
+    print(e.message)
+    print(e.kind, "retryable" if e.retryable else "not retryable")
 ```
 
 ### Receive delivery events
@@ -370,7 +371,7 @@ headers = HeadersObject(extra={
 
 ### Error handling
 
-Every method raises `ApiError` when the API returns an error; it carries the [API error code](https://docs.unione.io/en/web-api-ref#api-errors) and the HTTP status.
+Every method raises `ApiError`: an error of the API, a network error or a timeout, a broken response, and a mistake found before sending (an empty API key, a missing or empty `message.recipients` or `email` of a recipient: no request is sent). The message names the method and, for an API error, the [API error code](https://docs.unione.io/en/web-api-ref#api-errors), the HTTP status and how to fix it: `email/send: Unknown recipient (API error 204, HTTP 400). Fix: ...`. The error also tells what failed (its kind: api, network, timeout, invalid_response, invalid_request), whether a repeat may succeed (network, timeout, HTTP 429 and 5xx; not a request you cancelled) and keeps the API's own message text, in full and undecorated, in `api_message` (empty without an API response).
 
 ## Help
 
